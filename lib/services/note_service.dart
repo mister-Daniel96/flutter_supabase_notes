@@ -24,10 +24,17 @@ class NoteService {
 
   //read
   Stream<List<Note>> list(String userId) {
-    return _table
+    /*     return _table
         .stream(primaryKey: ['id'])
         .eq('user_id', userId)
-        .map((rows) => rows.map((row) => Note.fromMap(row)).toList());
+        .map((rows) => rows.map((row) => Note.fromMap(row)).toList()); */
+    return _table
+        .stream(primaryKey: ['id']) // sin filtros aquí
+        .map((rows) {
+          final notas = rows.map((row) => Note.fromMap(row)).toList();
+          // Filtramos en Flutter por userId
+          return notas.where((note) => note.userId == userId).toList();
+        });
   }
 
   //readById
